@@ -7,13 +7,20 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/sleep.h>
 #include "main.h"
+
+volatile uint8_t status =0;
+
 void init()
 {
+	// gpio 
 	DDRB = (1<<LED_OUT); //set LED_OUT as output
 	PORTB = 0x0;
-	SMCR =  (1<<SM1);// sleep mode = power down
 	
+	// pin change isr 	
+	PCMSK = ((1<< BOOST_EN) | (1<<OTG_EN));
+	PCICR = 1; // enable gpio interrupt
 }
 
 void setup_timer()
@@ -32,15 +39,34 @@ int main(void)
    
     while (1) 
     {
+		
+		if(status ==0)
+		{
+			// go power down
+			SMCR =  SLEEP_MODE_PWR_DOWN;
+			sleep_enable();
+			TCNT0 =0; // clear timer
+			PORTB &= ~(1<<LED_OUT); // turn off LED
+			sleep_cpu();
+		}
+		else
+		{
+			// go idle
+			SMCR =  SLEEP_MODE_IDLE;
+			sleep_enable();
+			sleep_cpu();
+		}
+		
     }
 }
 
+ISR(PCINT0_vect)
+{
+	status = PINB & ((1<<BOOST_EN) | (1<<OTG_EN));	
+}
 
 ISR(TIM0_COMPA_vect)
-{
-	//blink LED
-	//PORTB ^= (1<< LED_OUT);
-	
+{	
 	if((PINB & (1<<VSENSE)) == 1) // voltage alarm
 	{
 		//blink LED
