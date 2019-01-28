@@ -17,6 +17,8 @@ void init()
 	// gpio 
 	DDRB = (1<<LED_OUT); //set LED_OUT as output
 	PORTB = 0x0;
+	PUEB = (1<<BOOST_EN);
+	
 	
 	// pin change isr 	
 	PCMSK = ((1<< BOOST_EN) | (1<<OTG_EN));
@@ -67,7 +69,7 @@ ISR(PCINT0_vect)
 
 ISR(TIM0_COMPA_vect)
 {	
-	if((PINB & (1<<VSENSE)) == 1) // voltage alarm
+	if((PINB & (1<<VSENSE)) == 0) // voltage alarm triggered
 	{
 		//blink LED
 		PORTB ^= (1<< LED_OUT);

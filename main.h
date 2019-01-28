@@ -11,8 +11,8 @@
 
 #define VSENSE		PORTB0
 #define BOOST_EN	PORTB1
-#define OTG_EN		PORTB1 // will be PORTB2
-#define LED_OUT		PORTB2 // will be PORTB3
+#define OTG_EN		PORTB2//PORTB1 // will be PORTB2
+#define LED_OUT		PORTB3//PORTB2 // will be PORTB3
 
 //#define LED_OUT		PORTB3
 
