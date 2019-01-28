@@ -48,7 +48,7 @@ int main(void)
 			SMCR =  SLEEP_MODE_PWR_DOWN;
 			sleep_enable();
 			TCNT0 =0; // clear timer
-			PORTB &= ~(1<<LED_OUT); // turn off LED
+			PORTB |= (1<<LED_OUT); // turn off LED
 			sleep_cpu();
 		}
 		else
@@ -74,6 +74,6 @@ ISR(TIM0_COMPA_vect)
 		//blink LED
 		PORTB ^= (1<< LED_OUT);
 	}
-	else PORTB |= (1<<LED_OUT);
+	else PORTB &= ~(1<<LED_OUT); // turn ON LED
 	
 }
