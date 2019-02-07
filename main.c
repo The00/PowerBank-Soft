@@ -17,7 +17,7 @@ void init()
 	// gpio 
 	DDRB = (1<<LED_OUT); //set LED_OUT as output
 	PORTB = 0x0;
-	PUEB = (1<<BOOST_EN);
+	//PUEB = (1<<BOOST_EN); // pull-up on boost EN
 	
 	
 	// pin change isr 	
